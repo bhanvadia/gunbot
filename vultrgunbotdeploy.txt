@@ -1,0 +1,35 @@
+#! /bin/bash
+sudo apt update
+sudo apt-get install -y apt-transport-https gnupg2 curl wget
+sudo apt install -y zip unzip
+sudo echo "deb https://download.webmin.com/download/repository sarge contrib" \
+> /etc/apt/sources.list.d/webmin.list
+curl https://download.webmin.com/jcameron-key.asc | sudo apt-key add -
+sudo apt-get update
+sudo apt-get -y install webmin
+curl -sL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+sudo apt-get install -y nodejs
+sudo npm install pm2@latest -g
+export PM2_HOME="/root/.pm2"
+pm2 update
+cd /root/
+wget https://github.com/GuntharDeNiro/BTCT/releases/download/2046/lin.zip
+unzip lin.zip
+mv lin gunbot1
+cp -r gunbot1 gunbot2
+cp -r gunbot1 gunbot3
+cd /root/gunbot1/
+sed -i 's/5001/6000/g' config.js
+pm2 start ./gunthy-linux
+pm2 save
+cd /root/gunbot2
+sed -i 's/5001/6001/g' config.js
+sed -i 's/5000/5001/g' config.js
+pm2 start ./gunthy-linux
+cd /root/gunbot3
+sed -i 's/5001/6002/g' config.js
+sed -i 's/5000/5002/g' config.js
+pm2 start ./gunthy-linux
+pm2 save
+pm2 startup
+pm2 save
